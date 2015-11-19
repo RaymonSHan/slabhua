@@ -1,0 +1,548 @@
+
+* BROWSER
+use py
+http://scrapy.org/download/
+http://www.spiderfoot.net/download/
+
+
+top 50 list
+http://bigdata-madesimple.com/top-50-open-source-web-crawlers-for-data-mining/
+
+36 crawler
+http://www.findbestopensource.com/tagged/webcrawler
+
+| name           | url                                | desc                                     |
+|----------------+------------------------------------+------------------------------------------|
+| GNU Wget       | https://www.gnu.org/software/wget/ | too old, no desc to javascript           |
+| DataparkSearch | http://www.dataparksearch.org/     | including some JavaScript link decoding. |
+| HTTrack        | http://www.httrack.com/            | it more look like a reocrder, not spider |
+|                |                                    |                                          |
+
+all page have said, should do program for ajax POST in Scrapy, the most recommend sprider now.
+http://stackoverflow.com/questions/8550114/can-scrapy-be-used-to-scrape-dynamic-content-from-websites-that-are-using-ajax
+
+
+v8
+http://izs.me/v8-docs/v8_8h.html
+
+
+useful 
+http://my.oschina.net/u/1024140/blog/119752  !!
+    https://github.com/scrapinghub
+http://www.cnblogs.com/MingZznet/articles/3210052.html
+http://qinxuye.me/article/cola-a-distributed-crawler-framework/ cola
+http://blog.dutchcoders.io/using-scrapy-and-pyv8-to-scrape-inline-javascript/ v8 pyv8
+https://cnodejs.org/topic/51b13d7d555d34c678fb3e88 nodejs mongoDB
+
+
+http://codemirror.net/1/ unknown yet
+
+http://www.jb51.net/article/57183.htm very beginning
+http://blog.csdn.net/zzllabcd/article/details/21398163 install step
+http://blog.csdn.net/gugugujiawei/article/details/42968745 good step
+
+
+http://splash.readthedocs.org/en/latest/scripting-tutorial.html
+goin
+
+* DONE INSTALL SprapingHub
+  CLOSED: [2015-08-27 Thu 14:48]
+TOTAL: https://github.com/scrapinghub 
+USE: scrapy
+USE: splash
+
+** INSTALL scrapy
+scrapy:  https://github.com/scrapinghub/scrapy
+REQ: python v2.7
+RUN: sudo pip install scrapy
+DOC: http://doc.scrapy.org/en/latest/
+
+** INSTALL pip
+error for http://blog.csdn.net/henulwj/article/details/48131393  add in Oct. 14 '15
+
+** INSTALL docker
+docker request by splash : http://docs.docker.com/linux/step_one/
+RUN: sudo wget -qO- https://get.docker.com/ | sh
+
+** INSTALL splash
+splash: http://splash.readthedocs.org/en/latest/install.html
+REQ: docker
+RUN: sudo docker pull scrapinghub/splash
+DOC: http://splash.readthedocs.org/en/latest/scripting-tutorial.html
+
+** RUN splash
+splash
+RUN: sudo docker run -p 8050:8050 scrapinghub/splash
+TRY: curl 'http://127.0.0.1:8050/execute?lua_source=function+main%28splash%29%0D%0A++return+%27hello%27%0D%0Aend' 
+    RETURN:hello
+
+** INSTALL scrapyjs
+scrapyjs: https://github.com/scrapinghub/scrapy-splash
+RUN: sudo pip install scrapyjs
+MODI: settings.py: 
+
+* DONE LEARN Lua basic
+  CLOSED: [2015-08-27 Thu 16:09]
+Lua: http://tylerneylon.com/a/learn-lua/
+| Lua                                             | C++                         | equ / comment                     |
+|-------------------------------------------------+-----------------------------+-----------------------------------|
+| --                                              | //                          |                                   |
+| --[[ comment --] ]                              | /* comment */               | ] ] should be ]]                  |
+| num = 42                                        | double num = 42;            | 64bit, 52bit for base             |
+| s = 'immutable'                                 | const char *s ="immutable"; |                                   |
+| s = [[ multi                                    | char *s =" multi \          |                                   |
+| ...... line ] ]                                 | ...... line ";              | ] ] should be ]]                  |
+| t = nil                                         |                             | for garbage                       |
+|-------------------------------------------------+-----------------------------+-----------------------------------|
+| while a<10 do a=a+1 end                         |                             |                                   |
+| if then elseif then else end                    |                             |                                   |
+| for i = 100, 1, -1 do j = j + 1 end             |                             |                                   |
+| repeat i = i-1 until i = 0                      |                             |                                   |
+| if not i ~= 1 then end                          | ~= !=                       |                                   |
+| foo = unDefine                                  |                             | foo = nil                         |
+|-------------------------------------------------+-----------------------------+-----------------------------------|
+| function foo(n) return n end                    |                             |                                   |
+| function f(x) return x * x end                  |                             | f = function (x) return x * x end |
+| print 'hello'                                   |                             | print ('hello')                   |
+| for key, val in pairs(u) do print(key, val) end |                             | in, pairs are keywords            |
+| for i = 1, #v do print(v[i]) end                | #v sizeof(v)                |                                   |
+| print('I say ' .. self.sound)                   | .. strcat()                 |                                   |
+
+* DONE LEARN splash tutorial
+  CLOSED: [2015-08-27 Thu 18:56]
+splash : http://splash.readthedocs.org/en/latest/scripting-tutorial.html
+Basic UI : http://127.0.0.1:8050/
+Author's reason : https://www.reddit.com/r/Python/comments/2xp5mr/handling_javascript_in_scrapy_with_splash/
+
+* DONE TRY splash doing.
+  CLOSED: [2015-08-28 Fri 17:05]
+the way use js for href : http://jingyan.baidu.com/article/c45ad29cf6c075051653e24d.html
+
+the way to run js and get result
+curl -X POST -H 'content-type: application/json' \
+    -d '{"js_source": "javascript:go(curPage+1);return false;", "url": "http://stock.sohu.com/stock_scrollnews_25.shtml", "script": "1"}' \
+    'http://localhost:8050/render.json'
+
+curl -X POST -H 'content-type: application/json' \
+    -d '{"js_source": "function getContents(){ go(curPage+1); return document.location.href; }; getContents();", "url": "http://stock.sohu.com/stock_scrollnews_25.shtml", "script": "1"}' \
+    'http://localhost:8050/render.json'
+
+curl -X POST -H 'content-type: application/javascript' \
+    -d 'function getContents(){ go(curPage+1); return document.location.href; }; getContents();' \
+    'http://localhost:8050/render.json?url=http://stock.sohu.com/stock_scrollnews_25.shtml&script=1'
+
+curl -X POST -H 'content-type: application/json' \
+    -d '{"lua_source": "function main(splash) splash:go(\"http://stock.sohu.com/stock_scrollnews_25.shtml\") local title=splash:runjs(\"javascript:go(curPage+1);\") splash:wait(1) local href=splash:evaljs(\"document.location.href;\") return {title=title, href=href} end" }' \
+    'http://localhost:8050/execute'
+
+all the four are rational, but should sleep after run the js. there are no sleep in js, only in lua.
+And 0.2s is not enough, at least 0.3s in my T420. or it return the preview href before js run.
+
+curl -X POST -H 'content-type: application/json' \
+    -d '{"lua_source": "function main(splash) splash:go(\"http://stock.sohu.com/stock_scrollnews_25.shtml\") local title=splash:runjs(\"javascript:go(curPage+1);return false;\") splash:wait(1) local href=splash:evaljs(\"document.location.href;\") return {title=title, href=href} end" }' \
+    'http://localhost:8050/execute'
+
+but the real js, with "return false" addition, return bad. I know the reason why js in sohu seem so strange, everything is trap for splash.
+so splash may be pause.
+
+curl -X POST -H 'content-type: application/json' \
+    -d '{"lua_source": "function main(splash) local sohufunc = splash:jsfunc([[ function (){ go(curPage+1); return false; } ]]) local getfunc = splash:jsfunc([[ function (){ var ishref = document.location.href; return ishref;} ]]) splash:go(\"http://stock.sohu.com/stock_scrollnews_125.shtml\") sohuf=sohufunc() splash:wait(1) getf=getfunc() return {sohuf=sohuf, getfc=getf} end" }' \
+    'http://localhost:8050/execute'
+
+only this is OK
+
+* TODO LEARN python DOING ex40
+** python: http://learnpythonthehardway.org/book/
+put in top of .py for encode : (in ex1) -*- coding: utf-8 -*-
+| python                                                                  | C++    | comment                                         |
+|-------------------------------------------------------------------------+--------+-------------------------------------------------|
+| #                                                                       | //     |                                                 |
+| print "He's got %s eyes and %s hair." % (my_eyes, my_hair)              |        | print more like MARCO not func                  |
+| %r                                                                      |        | raw format, string store with ''                |
+| print "." * 10                                                          |        | ..........                                      |
+|                                                                         |        | every print do \r\n, unless ',' at last         |
+| print """ multi lines """                                               |        | %% for %                                        |
+| age = raw_input("How old are you? ")                                    |        |                                                 |
+| from sys import argv                                                    | **argv | from argv0                                      |
+| txt = open(filename, 'w') \  txt.read() \ write() \ close()             |        |                                                 |
+| ... truncate() \ readline() \ len() \ seek()                            |        |                                                 |
+| from os.path import exists \ exists(file)                               |        |                                                 |
+| def print(*args): \  arg1, arg2 = args \  print "%r, %r" % (arg1, arg2) |        | func body must with blank ahead                 |
+| if cond: elif cond: else:                                               |        |                                                 |
+| for val in range(x,y): \ while cond:                                    |        |                                                 |
+| keywords                                                                |        | http://learnpythonthehardway.org/book/ex37.html |
+| print '#'.join(stuff[3:7])                                              |        |                                                 |
+
+** python http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/ nice lesson
+print r'\\\t\\' 	-> \\\t\\
+isinstance('abc', Iterable) # str是否可迭代
+for i, value in enumerate(['A', 'B', 'C']): print i, value
+[x * x for x in range(1, 11) if x % 2 == 0]
+[m + n for m in 'ABC' for n in 'XYZ']
+
+def add(x, y, f): return f(x) + f(y)
+>>> def set_score(self, score): self.score = score
+>>> Student.set_score = MethodType(set_score, None, Student)
+
+Hello = type('Hello', (object,), dict(hello=fn)) # 创建Hello class
+[x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py']
+
+** Decorator 装饰器 http://www.cnblogs.com/rhcad/archive/2011/12/21/2295507.html
+** PyPY http://www.ibm.com/developerworks/cn/opensource/os-pypy-intro/ and splider
+** about py http://www.oschina.net/translate/why_pypy_is_the_future_of_python more things in future
+** super http://www.jb51.net/article/66912.htm
+
+* DONE LEARN scrapy : DONE FAQ
+  CLOSED: [2015-09-01 Tue 14:47]
+scrapy tutorial: http://doc.scrapy.org/en/latest/intro/tutorial.html
+
+XPath expression:
+learn more: http://zvon.org/comp/r/tut-XPath_1.html, http://blog.scrapinghub.com/2014/07/17/xpath-tips-from-the-web-scraping-trenches/
+//div[@class="mine"] : selects all div elements which contain an attribute class="mine"
+response.xpath('//ul/li/a/@href').extract() : return all link in body
+scrapy crawl dmoz -o items.json : save into file
+
+** scrapy command
+| create new project              | scrapy startproject <project_name>             | Global  |
+| create new splider              | scrapy genspider [-t template] <name> <domain> | Project |
+| run splider                     | scrapy crawl <spider>                          | Project |
+| get url                         | scrapy fetch <url>                             | Global  |
+| open browser to view            | scrapy view <url>                              | Global  |
+| get url and analysis by splider | scrapy parse <url> [options]                   | Project |
+
+** splider
+the start of splider start_requests(): \  make_requests_from_url(start_urls)
+
+useful command :
+response.xpath('//a[contains(@href, "image")]/@href').extract()
+divs = response.xpath('//div') \ for p in divs.xpath('.//p'): \ ... print p.extract()    // .// means inside //div, or use 'p'
+sel.xpath('//li[re:test(@class, "item-\d$")]//@href').extract()   // with regular
+sel = Selector(text=doc, type="html")   // doc is string, for extract more
+https://github.com/AmbientLighter/rpn-fas/blob/master/fas/spiders/rnp.py : example
+http://doc.scrapy.org/en/latest/topics/practices.html#avoiding-getting-banned : avoid banned
+https://www.91ri.org/11469.html : some info about splider
+
+* DONE LEARN XPath
+  CLOSED: [2015-09-01 Tue 23:59]
+http://zvon.org/xxl/XPathTutorial/General/examples.html
+
+| /                                                                             | absolute path                 |                              |
+| //                                                                            | from any level                |                              |
+| /*/level                                                                      | * : any name                  |                              |
+| /AAA/BBB[last()]                                                              |                               |                              |
+| //BBB[@id]                                                                    |                               | <BBB id = "xxx"/>            |
+| //BBB[not(@*)]                                                                | without attr                  | <BBB />                      |
+| //BBB[@name='bbb']                                                            |                               | <BBB name = "bbb"/>          |
+| //BBB[normalize-space(@name)='bbb']                                           | "bbb" is ok too               | <BBB name = " bbb "/>        |
+| //*[count(*)=2]                                                               | anyone with two child         | <DDD> <BBB /> <BBB /> </DDD> |
+| //*[name()='BBB']                                                             | name() is func                | <BBB />    <BBB id = "xxx"/> |
+| //*[starts-with(name(),'B')]                                                  |                               | <BBB />    <BBC />           |
+| //*[string-length(name()) &lt 3]                                              |                               | <Q />      <BB />            |
+| /AAA/EEE [or] //BBB                                                           | normal [or]                   |                              |
+| /child::AAA/child::BBB                                                        | child can be omit             | /AAA/BBB                     |
+| //CCC/descendant::DDD                                                         | after any level               |                              |
+| //DDD/parent::*                                                               |                               | <EEE> <DDD /> </EEE>         |
+| //FFF/ancestor::*                                                             | all level parent              |                              |
+| /AAA/BBB/following-sibling::*                                                 | all after that, in same level |                              |
+| /AAA/XXX/preceding-sibling::*                                                 | all before it, in same level  |                              |
+| //ZZZ/following::*                                                            | all after it, all level       |                              |
+| //BBB[position() mod 2 = 0 ]                                                  | start with 1                  |                              |
+| //BBB[position() = floor(last() div 2) or position() = ceiling(last() div 2)] |                               |                              |
+
+http://blog.csdn.net/xuandhu/article/details/338934
+
+
+* TODO CODE Sauro
+
+** try shell 
+scrapy shell "http://stock.sohu.com/stock_scrollnews.shtml"
+response.xpath('//ul/li/text()').extract()
+response.xpath('//div[@class="f14list"]/descendant::a/@href').extract()
+response.xpath('//div[@class="main area"]/descendant::div[@class="f14list"]/descendant::a/@href').extract()
+
+to run : scrapy crawl Sauro
+
+** try splash
+run splash : sudo docker run -p 8050:8050 scrapinghub/splash
+
+** XML format for output -- Sep. 16 '15
+<Sauro Version=1.0 Date=2015-09-16>
+  <SauroSite start_url="stock.sohu.com" allow_domain="stock.sohu.com">
+    <SauroPage url="stock.sohu.com/onepage.html" title="some title" level=1>    # This is Scrapy.Item, level for crawl deep
+      <SauroRefer from="stock.sohu.com" method="javascript:go(next_page)" />
+      <SauroStamp signlist="Daaabbb" urlmap="S5-xx" />
+      <SauroText mark="base64 of <div class='xx'>" value=3>
+        <SauroFragment>
+          base64 of content in it
+        </SauroFragment>
+      </SauroText>
+      <SauroText mark="base64 of <div class='yy'>" value=1>
+        <SauroFragment>
+          base64 of content in it
+        </SauroFragment>
+      </SauroText>
+      <SauroLinks value=10>   # link to text page
+        <SauroLink href="link" /> ...
+      </SauroLinks>
+    </SauroPage>
+  </SauroSite>
+</Sauro>
+
+http://blog.csdn.net/iloveyin/article/details/21468641 add more para in python
+def parse(self,response):
+    yield Request(url, callback=lambda response, typeid=5: self.parse_type(response,typeid))
+
+http://blog.csdn.net/tianmohust/article/details/7621424 dict in python ! very good !
+assign   d = dict(zip(['name', 'age'], ['visaya', 20])) 
+
+http://www.jb51.net/article/41972.htm except in python
+http://www.jb51.net/article/55734.htm  __xxx__ method in python  __slots__ save many memory for huge number of class
+http://blog.chinaunix.net/uid-12720249-id-2918322.html  see more for __getitem__
+
+http://www.cnblogs.com/yuxc/archive/2011/08/07/2130229.html for python in language process 
+
+http://wklken.me/ adv for python, as memory, the best index i have see
+
+http://www.cnblogs.com/coser/archive/2011/12/14/2287739.html json myencode mydecode
+
+def parse_type(self,response, typeid):
+    print typeid
+
+stampall = dict(stamphave, **stampnot)
+stampboth = dict.fromkeys([x for x in stamphave if x in stampnot])
+
+response.xpath('//div[@itemprop="articleBody"]/text()').extract().encode('utf-8')
+
+
+<div id="root">
+  include1
+  <div id="useful1">
+    include2
+      <div id="any">
+        include3
+      </div>
+  </div>
+  <div id="useful2">
+    include4
+    <div id="useless">
+      exclude1
+      <div id="any">
+        exclude2
+      </div>
+      exclude3
+    </div>
+  </div>
+  include5
+</div>
+
+
+i need 'include1 include2 include3 include4'
+the most crazy is how to include1 & 5
+
+
+
+* TODO MySQL in ubuntu
+** install 
+sudo apt-get install mysql-server
+** config file , not changed
+http://blog.chinaunix.net/uid-223060-id-2127099.html
+/etc/mysql/my.cnf
+/etc/init.d/mysql
+** stop engine
+sudo stop mysql | sudo /etc/init.d/mysql stop | sudo service mysql stop
+** cp file
+sudo su; cd /var/lib/mysql
+** for remote access
+http://www.cnblogs.com/easyzikai/archive/2012/06/17/2552357.html
+change /etc/mysql/my.cnf listen
+** useful command
+$mysql -u user -h host -p
+>use mysql
+>SELECT User, Password, Host FROM user;
+>GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.206.138' IDENTIFIED BY '' WITH GRANT OPTION;
+>flush privileges;
+
+** install MySQL-python
+http://www.cnblogs.com/fnng/p/3565912.html
+http://blog.sina.com.cn/s/blog_5357c0af010117nf.html
+apt-get install python-dev
+python setup.py build python setup.py install
+** install mysql-workbench
+apt-get it, cool
+
+
+CREATE TABLE `quotes_gbk`.`stock_quotation` (
+  `line_number` INT NOT NULL AUTO_INCREMENT,
+  `stock_id` VARCHAR(32) NOT NULL,
+  `stock_price` FLOAT NULL DEFAULT 0,
+  `stock_totalamount` INT NULL DEFAULT 0,
+  `stock_todayamount` INT NULL DEFAULT 0,
+  `update_time` DATETIME NOT NULL,
+  PRIMARY KEY (`line_number`));
+
+CREATE TABLE `quotes_gbk`.`stock_detail` (
+  `line_number` INT NOT NULL AUTO_INCREMENT,
+  `stock_id` VARCHAR(32) NOT NULL,
+  `stock_number` VARCHAR(32) NOT NULL,
+  `stock_name` VARCHAR(32) NULL,
+  `stock_fullname` VARCHAR(128) NULL,
+  `stock_website` VARCHAR(256) NULL,
+  `stock_opendate` DATETIME NULL,
+  `stock_infourl` VARCHAR(256) NOT NULL,
+  `update_time` DATETIME NOT NULL,
+  PRIMARY KEY (`line_number`));
+  
+** timing doing
+http://www.cnblogs.com/justinzhang/p/4500409.html
+
+** data, datatime, string
+http://my.oschina.net/u/1032854/blog/198179
+
+* ansj
+https://github.com/NLPchina/ansj_seg
+http://nlpchina.github.io/ansj_seg/ download ansj jar
+http://www.douban.com/note/311967659/?type=like use
+http://www.blogchong.com/post/78.html use java
+http://www.ipexe.com/open-source/9872.html source desc
+http://www.mamicode.com/info-detail-372798.html
+http://www.hankcs.com/nlp/ansj-word-pairs-array-tire-tree-achieved-with-arrays-dic-dictionary-format.html tired tree
+http://www.mincoder.com/article/3769.shtml userdefine
+http://www.doc88.com/p-0314730361272.html 
+http://lies-joker.iteye.com/blog/2173086 IKanalyzer,ansj_seg,jcseg
+http://yucang52555.iteye.com/blog/2164829 custum dict in ansj
+
+http://soshow.com/s/?wd=%E5%81%9C%E7%94%A8%E8%AF%8D+ansj&ie=utf-8&rsv_crq=7&bs=%E5%93%88%E5%B7%A5%E5%A4%A7%E4%B8%AD%E6%96%87%E5%81%9C%E7%94%A8%E8%AF%8D%E8%A1%A8%E6%89%A9%E5%B1%95 nice search
+http://www.zhihu.com/topic/19591482 zhihu
+http://bosonnlp.com/dev/resource boson
+http://www.hankcs.com/nlp/ansj-word-pairs-array-tire-tree-achieved-with-arrays-dic-dictionary-format.html dict format
+
+http://simple-is-better.com/news/319 cc-cedict
+http://wenku.baidu.com/link?url=v6SaMIqGkj8vi_qdpb-TcC7MsPl7waNN8kzgZy1z6VYkFMZ2_Jff2M_L1W_4W0I6QttCZzmD9OtWAfqVmVu0FlNpzTYSPJat9hjBUOKiR5m for baidu and google
+http://blog.csdn.net/chs_jdmdr/article/details/7359773 in lucene
+http://my.oschina.net/apdplat/blog/412921 cmp 11
+http://my.oschina.net/apdplat/blog/228615 cmp
+http://www.open-open.com/lib/view/open1420814197171.html gainian
+http://www.oschina.net/p/cws_evaluation/similar_projects?lang=341&sort=time cws
+
+http://m.blog.csdn.net/blog/huyoo/12188573 nltk python
+http://blog.csdn.net/rav009/article/details/12196623    python jieba
+http://www.cnblogs.com/chinafine/archive/2010/09/02/1815980.html web.xml nice
+http://www.cnblogs.com/xdp-gacl/p/3798347.html get value in java
+
+http://www.greenxf.com/soft/61383.html ciku
+
+keywords
+https://raw.githubusercontent.com/observerss/textfilter/master/keywords
+http://txdl.cn/baidu/ test online
+
+http://freeebayimagehost.com/
+http://fanhexie.googlecode.com/files/
+http://www.cnblogs.com/taoweiji/archive/2012/12/11/2812852.html
+
+** java openssl
+http://stackoverflow.com/questions/5416194/openssl-with-java
+javax.crypto http://docs.oracle.com/javase/1.5.0/docs/api/
+bouncycastle  http://www.bouncycastle.org/
+java use http://blog.csdn.net/chaijunkun/article/details/7275632/  http://blog.csdn.net/sunguangran/article/details/6742463
+openssl cmd http://www.cnblogs.com/yangy608/archive/2012/11/16/2773206.html
+
+** mangoDB
+http://www.cnblogs.com/ymind/archive/2012/04/25/2470551.html use mango
+** mysql
+http://blog.sina.com.cn/s/blog_52d20fbf0100ofd5.html store procedure
+http://wallimn.iteye.com/blog/2059128 mongo in java
+http://www.cs.jhu.edu/~nikhil/proc_examples.txt store procedure sample
+http://www.cnblogs.com/discuss/articles/1862248.html code-page utf-8 use
+http://blog.csdn.net/miraclestar/article/details/6525236 insert or update -> replace
+http://blog.chinaunix.net/uid-20639775-id-3180980.html all timeout
+http://blog.163.com/yutao_10/blog/static/120190049201031553545232/ wait timeout mysql_ping
+max_allowed_packet | 1048576 | largest sql sentence
+
+** java 
+http://uujava0322.iteye.com/blog/1045876 java file
+http://blog.sina.com.cn/s/blog_6047c8870100qftt.html java char byte
+http://www.blogjava.net/Steven-bot/articles/361974.html java path
+* walk
+** Oct. 31 '15
+38km 10:00-17:35 455
+车道沟-白石桥-甘家口-阜成门-故宫-朝阳门-呼家楼-郑家窑桥-通州北关桥-新惠桥-通州北关地铁站
+** Nov. 7 '15
+17km 11:30-14:50 185
+车道沟-西钓鱼台-南如意门-车道沟
+** Nov. 8 '15
+19km + 7km + 2km 10:30-16:15 325
+车道沟-杏石口路-西山东门-鬼笑石-西山南门-车道沟
+
+* emacs
+https://ignaciopp.wordpress.com/2009/06/17/emacs-indentunindent-region-as-a-block-using-the-tab-key/ key tab
+* bookmark
+** http://www.daimg.com/font/chinese/list_84_18.html font chinese font
+* ethereum
+** start
+http://8btc.com/thread-25411-1-1.html chinese start
+http://ethfans.org/posts/ethereum-whitepaper white paper in chinese
+http://ethfans.org/posts/yi-tai-fang-de-jin-hua project list
+
+** install
+*** share host folder in ubuntu
+http://blog.csdn.net/zz962/article/details/7706755
+http://bbs.csdn.net/topics/350258010
+and should overwrite files in /mnt/hgfs !!!! when install vmtools
+*** python virtualenv # not use yet
+http://www.cnblogs.com/tk091/p/3700013.html
+sudo pip install virtualenv
+/code# virtualenv test_env --no-site-packages          # create env # for not use public packets
+/code/test_env# source ./bin/activate                  # enter env
+/code/test_env# deactivate                             # leave env
+*** install pyethereum
+https://github.com/ethereum/pyethereum/wiki/Developer-Notes
+sudo apt-get install python-dev
+sudo apt-get install libssl-dev
+git clone https://github.com/ethereum/pyethereum/
+cd pyethereum
+sudo pip install -r requirements.txt
+sudo python setup.py install
+*** install testrpc
+https://github.com/ConsenSys/eth-testrpc
+sudo pip install eth-testrpc
+testrpc                                                # run
+*** prepare solidity
+https://ethereum.github.io/solidity/                   # documents
+https://github.com/ethereum/webthree-umbrella/wiki     # bulid step
+sudo apt-add-repository ppa:george-edison55/cmake-3.x
+sudo apt-get -y update
+sudo apt-get -y install language-pack-en-base
+sudo dpkg-reconfigure locales
+sudo apt-get -y install software-properties-common
+wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
+sudo add-apt-repository "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
+sudo add-apt-repository -y ppa:ethereum/ethereum-qt
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo add-apt-repository -y ppa:ethereum/ethereum-dev
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y install build-essential git cmake libboost-all-dev libgmp-dev libleveldb-dev libminiupnpc-dev libreadline-dev libncurses5-dev libcurl4-openssl-dev libcryptopp-dev libjson-rpc-cpp-dev libmicrohttpd-dev libjsoncpp-dev libargtable2-dev llvm-3.7-dev libedit-dev mesa-common-dev ocl-icd-libopencl1 opencl-headers libgoogle-perftools-dev qtbase5-dev qt5-default qtdeclarative5-dev libqt5webkit5-dev libqt5webengine5-dev ocl-icd-dev libv8-dev libz-dev
+*** install solidity
+git clone --recursive https://github.com/ethereum/webthree-umbrella
+cd webthree-umbrella
+mkdir build
+cd build
+cmake ..
+make -j 2
+*** install nodejs
+https://nodejs.org/en/download/ download source
+./configure
+make
+sudo make install
+*** install truffle
+sudo apt-get install npm
+sudo npm install -g npm
+sudo npm install -g any-missing  ( I missing : ansi-regex  balanced-match  graceful-fs  lru-cache  number-is-nan  sigmund  wrappy)
+sudo npm install -g truffle
+truffle list                                           # verity
+
+
+
+
+** solidity learn
+https://ethereum.github.io/solidity//docs/simple-smart-contract/ 
