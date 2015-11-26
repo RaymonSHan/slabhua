@@ -1,0 +1,37 @@
+在ethereum中定义合约的总结
+
+* DAO/DAC
+中本聪提出通过工作量证明（Proofs of Work/PoW）组成块链（BlockChain）的方式，
+  将拜占庭容错（Byzantine-fault-tolerant）的解从(N/4)提升到(N/2)。
+  为去中心化的匿名电子货币协议，提供了基石。
+
+自此去中心化自治组织（Decentralized Autonomous Organization/DAO）”或
+  “Distributed Autonomous Corporation/Company /DAC”（[[https://en.m.wikipedia.org/wiki/Distributed_autonomous_organization][wiki]]） 开始了实质地发展。
+  DAO/DAC定义了自身的七层协议，使用数学手段取代法律手段，复制了传统公司的执行方式。
+  这类实现方式被称为DACFramework/DACF。
+  可以认为BitCoin为第一代DACF，Ethereum为第二代DACF。
+
+BitCoin在块链中存储了所有的交易，以及完成交易所需要的条件（脚本）。
+  但由于脚本只有默认的两种状态、无法获取块链上的其他数据、脚本被刻意设计为图灵不完备。
+
+Ethereum在多个方面，对BitCoin近年来暴露出的问题进行了改进。
+  在PoW方面，使用了随机的挖矿算法。使用了简化的（Greedy Heaviest Observed Subtree/GHOST）协议，
+    以尽可能的提高挖矿的去中心化。
+  增加了燃料（Gas）概念，避免了脚本的死循环。
+  并由此完成了对块链上数据、事件的访问，实现了图灵完备的虚拟机（EVM）。
+
+Ethereum是DACF的一个实现。并使DAC的实例之间可以相互通信，协作。
+
+* Ethereum 框架
+目前Ethereum的版本为V1.0，代号Frontier。主要完成交易与挖矿，即客户端部份。
+
+客户端，DAO/DAC没有服务端，目前仅有存储完整块链的客户端。包括[[https://github.com/ethereum/webthree-umbrella/wiki][C++]]、 [[https://github.com/ethereum/go-ethereum/wiki][Go]]、 [[https://github.com/ethereum/pyethereum/wiki][Python]] 三个版本。
+
+ethkey为ether的钱包
+  
+EVM中可使用的多种脚本语言，并通过序列化转换为[[https://github.com/ethereum/wiki/wiki/RLP][RLP]] 编码的字节流，以存储于块链上。
+  可选择的脚本语言有类似Javascript的[[https://ethereum.github.io/solidity/docs/home/][Solidity]]、 类似Python的[[https://github.com/ethereum/wiki/wiki/Serpent][Serpent]]、 类似Lisp的LLL。
+  
+
+Contract: an account which contains, and is controlled by, EVM code. 
+
